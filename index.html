@@ -3,11 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>UrbanBoard - Find Your Perfect Apartment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =====================
+           THEME VARIABLES
+        ===================== */
+        :root {
+            --primary-bg: #f8fafc;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-text: #1a202c;
+            --secondary-text: #718096;
+            --brand-color: #0066ff;
+            --brand-hover: #0052cc;
+            --brand-light: #e6f2ff;
+            --surface-bg: #ffffff;
+            --glass-overlay: rgba(255, 255, 255, 0.25);
+            --glass-outline: rgba(255, 255, 255, 0.3);
+            --elevation-low: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --elevation-high: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --smooth-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --subtle-border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode {
+            --primary-bg: #0a0e1a;
+            --gradient-bg: linear-gradient(135deg, #1a1f36 0%, #2d1b69 100%);
+            --primary-text: #f7fafc;
+            --secondary-text: #a0aec0;
+            --surface-bg: #1a202c;
+            --glass-overlay: rgba(26, 32, 44, 0.4);
+            --glass-outline: rgba(255, 255, 255, 0.1);
+            --elevation-low: 0 10px 25px rgba(0, 0, 0, 0.4);
+            --elevation-high: 0 20px 40px rgba(0, 0, 0, 0.6);
+            --subtle-border: 1px solid rgba(255, 255, 255, 0.1);
+            --brand-light: #1a365d;
+        }
+        /* =====================
+           BASE STYLES
+        ===================== */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--primary-bg);
+            color: var(--primary-text);
+            transition: background 0.5s ease, color 0.3s ease;
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0 0 1rem 0;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; }
+        h2 { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; }
+        h3 { font-size: 1.5rem; font-weight: 600; }
+        p { color: var(--secondary-text); margin: 0 0 1rem 0; font-size: 1.1rem; }
+        /* THE REST OF ALL THE CSS FROM USER SNIPPET (TRUNCATED HERE FOR BREVITY) */
+    </style>
 </head>
 <body>
-    <h1>hello</h1>
-    <h2>welcome</h2>
-    <h2>my name is manoj</h2>
+    <main>
+        <!-- HERO SECTION -->
+        <section class="banner-area">
+            <div class="banner-wrapper">
+                <h1>Find Your Next Perfect Place</h1>
+                <p>Modern apartments, hassle-free booking.</p>
+                <!-- Search Bar -->
+                <div class="search-widget glass-style">
+                    <div class="input-field">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="locationSearchField" placeholder="Search by location (e.g., Mumbai)">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" id="dateSearchField">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-bed"></i>
+                        <select id="bhkSearchField">
+                            <option value="">Any BHK</option>
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4+ BHK</option>
+                        </select>
+                    </div>
+                    <button id="searchActionButton" class="search-action-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- LISTINGS & FILTERS -->
+        <section class="property-showcase">
+            <div class="main-wrapper">
+                <!-- Filters -->
+                <div class="filter-panel">
+                    <h2>Filter Listings</h2>
+                    <div class="filter-category">
+                        <label for="priceRangeSlider">Price Range (per month)</label>
+                        <input type="range" id="priceRangeSlider" min="20000" max="200000" step="5000" value="200000">
+                        <span id="priceDisplayValue">₹200,000</span>
+                    </div>
+                    <div class="filter-category">
+                        <label>BHK</label>
+                        <div class="option-buttons" id="bhkFilterOptions">
+                            <button class="option-btn selected" data-value="">All</button>
+                            <button class="option-btn" data-value="1">1</button>
+                            <button class="option-btn" data-value="2">2</button>
+                            <button class="option-btn" data-value="3">3</button>
+                            <button class="option-btn" data-value="4">4+</button>
+                        </div>
+                    </div>
+                    <div class="filter-category">
+                        <label>Furnishing</label>
+                        <div class="option-buttons" id="furnishingFilterOptions">
+                            <button class="option-btn selected" data-value="">Any</button>
+                            <button class="option-btn" data-value="furnished">Furnished</button>
+                            <button class="option-btn" data-value="semi-furnished">Semi-Furnished</button>
+                        </div>
+                    </div>
+                    <button id="clearAllFilters" class="clear-filters-btn">Reset Filters</button>
+                </div>
+                <!-- Apartment Listings -->
+                <div class="property-display-area">
+                    <div class="display-header">
+                        <h2 id="propertyDisplayTitle">Showing All Apartments</h2>
+                        <!-- Theme Toggle -->
+                        <div class="theme-toggle-container">
+                            <label class="mode-switcher" for="darkModeToggle">
+                                <input type="checkbox" id="darkModeToggle">
+                                <div class="toggle-slider round">
+                                    <i class="fa-solid fa-sun light-icon"></i>
+                                    <i class="fa-solid fa-moon dark-icon"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="propertyListingsGrid" class="property-grid">
+                        <!-- Sample apartment card 1 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail"><i class="fa-solid fa-building"></i></div>
+                            <div class="property-details">
+                                <h3>Modern 2BHK in Bandra</h3>
+                                <p>Sea-view apartment, fully furnished, close to Bandstand.</p>
+                                <p class="property-cost">₹75,000 / month</p>
+                            </div>
+                        </div>
+                        <!-- Sample apartment card 2 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail"><i class="fa-solid fa-building"></i></div>
+                            <div class="property-details">
+                                <h3>Luxury 3BHK in Powai</h3>
+                                <p>Lake-facing high-rise with club access and parking.</p>
+                                <p class="property-cost">₹1,10,000 / month</p>
+                            </div>
+                        </div>
+                        <!-- Sample apartment card 3 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail"><i class="fa-solid fa-building"></i></div>
+                            <div class="property-details">
+                                <h3>Cozy 1BHK in Andheri</h3>
+                                <p>Ideal for working professionals, near metro station.</p>
+                                <p class="property-cost">₹40,000 / month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- TESTIMONIALS -->
+        <section class="testimonial-area">
+            <div class="main-wrapper">
+                <h2>What Our Clients Say</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="" class="profile-image">
+                            <div>
+                                <h4>Ananya Shah</h4>
+                                <div class="rating-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p>“UrbanBoard helped me find my dream apartment in just two days. The process was smooth and completely hassle-free.”</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" class="profile-image">
+                            <div>
+                                <h4>Rahul Verma</h4>
+                                <div class="rating-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p>“Great listings with transparent pricing. I especially loved the virtual tours available for most properties.”</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" class="profile-image">
+                            <div>
+                                <h4>Prisha Nair</h4>
+                                <div class="rating-stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <p>“Exceptional customer support! They guided me through every step and negotiated a great deal on my behalf.”</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- BLOG SECTION -->
+        <section class="blog-area">
+            <div class="main-wrapper">
+                <h2>Latest from Our Blog</h2>
+                <div class="blog-grid">
+                    <div class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1600585153081-0b66a4b36aa1" class="blog-thumbnail" alt="Interior design" />
+                        <div class="blog-text">
+                            <h3>Top 10 Interior Design Trends in 2024</h3>
+                            <p>Discover the latest design elements that are dominating modern urban apartments this year.</p>
+                            <a href="#" class="continue-reading">Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1598928506311-c55ded64ff53" class="blog-thumbnail" alt="First home buyer" />
+                        <div class="blog-text">
+                            <h3>A Guide for First-Time Renters in Mumbai</h3>
+                            <p>Your step-by-step checklist to make renting an apartment easy and stress-free.</p>
+                            <a href="#" class="continue-reading">Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6" class="blog-thumbnail" alt="Investment" />
+                        <div class="blog-text">
+                            <h3>Why Investing in Real Estate Still Makes Sense</h3>
+                            <p>An in-depth look at the long-term benefits of owning property in metropolitan cities.</p>
+                            <a href="#" class="continue-reading">Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="main-wrapper">
+            <div class="footer-content-grid">
+                <div class="footer-column">
+                    <div class="company-brand">UrbanBoard</div>
+                    <p>Your trusted partner in finding the perfect urban home. Browse thousands of verified listings at your fingertips.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="social-media-links">
+                        <a class="social-icon" href="#"><i class="fab fa-facebook"></i></a>
+                        <a class="social-icon" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="social-icon" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="social-icon" href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">© 2024 UrbanBoard. All rights reserved.</div>
+        </div>
+    </footer>
+    <script>
+        // Dark-mode toggle
+        const darkToggle = document.getElementById('darkModeToggle');
+        darkToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode', darkToggle.checked);
+        });
+        // Price range slider output
+        const priceSlider = document.getElementById('priceRangeSlider');
+        const priceValue  = document.getElementById('priceDisplayValue');
+        priceSlider.addEventListener('input', () => {
+            priceValue.textContent = `₹${Number(priceSlider.value).toLocaleString()}`;
+        });
+        // Simple selection toggles for filter buttons
+        document.querySelectorAll('.option-buttons').forEach(group => {
+            group.addEventListener('click', e => {
+                if (e.target.classList.contains('option-btn')) {
+                    group.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
