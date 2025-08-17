@@ -3,11 +3,1471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>UrbanBoard - Find Your Perfect Apartment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =====================
+   THEME VARIABLES
+===================== */
+:root {
+    --primary-bg: #f8fafc;
+    --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-text: #1a202c;
+    --secondary-text: #718096;
+    --brand-color: #0066ff;
+    --brand-hover: #0052cc;
+    --brand-light: #e6f2ff;
+    --surface-bg: #ffffff;
+    --glass-overlay: rgba(255, 255, 255, 0.25);
+    --glass-outline: rgba(255, 255, 255, 0.3);
+    --elevation-low: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --elevation-high: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --border-radius: 16px;
+    --border-radius-sm: 8px;
+    --smooth-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --subtle-border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode {
+    --primary-bg: #0a0e1a;
+    --gradient-bg: linear-gradient(135deg, #1a1f36 0%, #2d1b69 100%);
+    --primary-text: #f7fafc;
+    --secondary-text: #a0aec0;
+    --surface-bg: #1a202c;
+    --glass-overlay: rgba(26, 32, 44, 0.4);
+    --glass-outline: rgba(255, 255, 255, 0.1);
+    --elevation-low: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --elevation-high: 0 20px 40px rgba(0, 0, 0, 0.6);
+    --subtle-border: 1px solid rgba(255, 255, 255, 0.1);
+    --brand-light: #1a365d;
+}
+
+/* =====================
+   BASE STYLES
+===================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--primary-bg);
+    color: var(--primary-text);
+    transition: background 0.5s ease, color 0.3s ease;
+    line-height: 1.7;
+    font-size: 16px;
+    overflow-x: hidden;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Typography improvements */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+p {
+    color: var(--secondary-text);
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+/* =====================
+   HERO SECTION
+===================== */
+.banner-area {
+    background: linear-gradient(135deg, 
+        rgba(0, 102, 255, 0.9) 0%, 
+        rgba(102, 126, 234, 0.8) 50%, 
+        rgba(118, 75, 162, 0.9) 100%
+    ), 
+    url("https://images.unsplash.com/photo-1493809842364-78817add7ffb") center/cover no-repeat;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-area::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+    animation: floating-animation 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes floating-animation {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-50%, -50%) rotate(180deg); }
+}
+
+.banner-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: slideUp 1s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.banner-wrapper h1 {
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.banner-wrapper p {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* =====================
+   SEARCH BAR
+===================== */
+.search-widget {
+    display: flex;
+    align-items: center;
+    background: var(--glass-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-outline);
+    border-radius: 60px;
+    padding: 0.75rem;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: var(--elevation-low);
+    transition: var(--smooth-transition);
+    gap: 1rem;
+}
+
+.search-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-high);
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    flex: 1;
+    position: relative;
+}
+
+.input-field i {
+    margin-right: 0.75rem;
+    color: var(--brand-color);
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.input-field input,
+.input-field select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.75rem 0;
+}
+
+.input-field input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-action-btn {
+    background: linear-gradient(135deg, var(--brand-color) 0%, var(--brand-hover) 100%);
+    border: none;
+    border-radius: 50%;
+    padding: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--smooth-transition);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 102, 255, 0.6);
+}
+
+.search-action-btn i {
+    font-size: 1.1rem;
+}
+
+/* =====================
+   LAYOUT & CONTAINER
+===================== */
+.property-showcase {
+    padding: 4rem 0;
+    background: var(--primary-bg);
+}
+
+.main-wrapper {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* =====================
+   FILTERS
+===================== */
+.filter-panel {
+    flex: 0 0 300px;
+    background: var(--surface-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--elevation-low);
+    border: var(--subtle-border);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    transition: var(--smooth-transition);
+}
+
+.filter-panel:hover {
+    box-shadow: var(--elevation-high);
+}
+
+.filter-panel h2 {
+    color: var(--primary-text);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.filter-category {
+    margin-bottom: 2rem;
+}
+
+.filter-category label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--primary-text);
+    font-size: 0.95rem;
+}
+
+/* Price range slider */
+#priceRangeSlider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--brand-light);
+    outline: none;
+    margin-bottom: 0.5rem;
+}
+
+#priceRangeSlider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--brand-color);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 102, 255, 0.3);
+}
+
+#priceDisplayValue {
+    font-weight: 700;
+    color: var(--brand-color);
+    font-size: 1.1rem;
+}
+
+.option-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.option-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: var(--brand-light);
+    border: 2px solid transparent;
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: var(--smooth-transition);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--primary-text);
+    min-width: 50px;
+}
+
+.option-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--brand-color);
+}
+
+.option-btn.selected {
+    background: var(--brand-color);
+    color: white;
+    border-color: var(--brand-color);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+}
+
+.clear-filters-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--brand-color) 0%, var(--brand-hover) 100%);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--smooth-transition);
+    margin-top: 1rem;
+}
+
+.clear-filters-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-high);
+}
+
+/* =====================
+   LISTINGS
+===================== */
+.property-display-area {
+    flex: 1;
+}
+
+.display-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: var(--subtle-border);
+}
+
+.display-header h2 {
+    color: var(--primary-text);
+    margin: 0;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+}
+
+.mode-switcher {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.mode-switcher input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--brand-light);
+    transition: var(--smooth-transition);
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: var(--smooth-transition);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+input:checked + .toggle-slider {
+    background: var(--brand-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(30px);
+}
+
+.light-icon, .dark-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    transition: var(--smooth-transition);
+}
+
+.light-icon {
+    left: 8px;
+    color: #ffd700;
+}
+
+.dark-icon {
+    right: 8px;
+    color: #87ceeb;
+}
+
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Placeholder for apartment cards */
+.property-item {
+    background: var(--surface-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--elevation-low);
+    transition: var(--smooth-transition);
+    border: var(--subtle-border);
+}
+
+.property-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--elevation-high);
+}
+
+.property-thumbnail {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-color) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-color);
+    font-size: 2rem;
+}
+
+.property-details {
+    padding: 1.5rem;
+}
+
+.property-details h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-text);
+}
+
+.property-cost {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--brand-color);
+    margin-bottom: 0.5rem;
+}
+
+.property-features {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+}
+
+.feature-item i {
+    color: var(--brand-color);
+}
+
+.view-details-btn {
+    width: 100%;
+    background: var(--brand-color);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--smooth-transition);
+}
+
+.view-details-btn:hover {
+    background: var(--brand-hover);
+    transform: translateY(-2px);
+}
+
+/* =====================
+   SECTIONS
+===================== */
+.testimonial-area,
+.blog-area {
+    padding: 4rem 2rem;
+    background: var(--primary-bg);
+}
+
+.testimonial-area {
+    background: linear-gradient(135deg, var(--brand-light) 0%, transparent 100%);
+}
+
+.testimonial-area .main-wrapper,
+.blog-area .main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block;
+}
+
+.testimonial-area h2,
+.blog-area h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--primary-text);
+}
+
+/* =====================
+   CARDS
+===================== */
+.testimonial-item,
+.blog-item {
+    background: var(--surface-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--elevation-low);
+    border: var(--subtle-border);
+    transition: var(--smooth-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-item::before,
+.blog-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-color) 0%, var(--brand-hover) 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-item:hover::before,
+.blog-item:hover::before {
+    transform: scaleX(1);
+}
+
+.testimonial-item:hover,
+.blog-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--elevation-high);
+}
+
+/* =====================
+   REVIEWS
+===================== */
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--brand-light);
+}
+
+.testimonial-profile h4 {
+    margin: 0;
+    color: var(--primary-text);
+    font-size: 1.1rem;
+}
+
+.rating-stars {
+    color: #ffd700;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.testimonial-item p {
+    font-style: italic;
+    color: var(--secondary-text);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* =====================
+   BLOG
+===================== */
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.blog-thumbnail {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    transition: var(--smooth-transition);
+}
+
+.blog-item:hover .blog-thumbnail {
+    transform: scale(1.03);
+}
+
+.blog-text h3 {
+    color: var(--primary-text);
+    margin-bottom: 0.75rem;
+    font-size: 1.3rem;
+}
+
+.blog-text p {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.continue-reading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--brand-color);
+    font-weight: 600;
+    transition: var(--smooth-transition);
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+}
+
+.continue-reading:hover {
+    color: var(--brand-hover);
+    border-bottom-color: var(--brand-hover);
+    transform: translateX(4px);
+}
+
+.continue-reading i {
+    transition: var(--smooth-transition);
+}
+
+.continue-reading:hover i {
+    transform: translateX(4px);
+}
+
+/* =====================
+   FOOTER STYLES
+===================== */
+.site-footer {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 3rem 1rem 2rem;
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.site-footer .main-wrapper {
+    max-width: 1200px;
+    margin: auto;
+    display: block;
+}
+
+.footer-content-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-column {
+    flex: 1 1 200px;
+}
+
+.company-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-column h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-column p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #bdc3c7;
+}
+
+.footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-nav a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.footer-nav a:hover {
+    color: #1abc9c;
+    text-decoration: underline;
+}
+
+.social-media-links {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icon {
+    font-size: 1.4rem;
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+    color: #ecf0f1;
+}
+
+.social-icon:hover {
+    transform: scale(1.2);
+    color: #1abc9c;
+}
+
+.footer-copyright {
+    text-align: center;
+    border-top: 1px solid #7f8c8d;
+    padding-top: 1rem;
+    font-size: 0.9rem;
+    color: #95a5a6;
+}
+
+/* =====================
+   RESPONSIVE DESIGN
+===================== */
+@media (max-width: 768px) {
+    .main-wrapper {
+        flex-direction: column;
+        padding: 0 1rem;
+    }
+    
+    .filter-panel {
+        flex: none;
+        position: static;
+    }
+    
+    .search-widget {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+    }
+    
+    .input-field {
+        padding: 0;
+    }
+    
+    .banner-wrapper h1 {
+        font-size: 2.5rem;
+    }
+    
+    .banner-wrapper p {
+        font-size: 1.1rem;
+    }
+    
+    .display-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .option-buttons {
+        gap: 0.25rem;
+    }
+    
+    .option-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .footer-content-grid {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-column {
+        max-width: 100%;
+    }
+    
+    .social-media-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner-area {
+        padding: 1rem;
+        min-height: 80vh;
+    }
+    
+    .testimonial-grid,
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .property-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================
+   UTILITY CLASSES
+===================== */
+.glass-style {
+    background: var(--glass-overlay);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-outline);
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
+@keyframes pulse-effect {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.pulse-animation {
+    animation: pulse-effect 2s ease-in-out infinite;
+}
+
+/* Loading states */
+.loading-state {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-state::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer-effect 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer-effect {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+    </style>
 </head>
 <body>
-    <h1>hello</h1>
-    <h2>welcome</h2>
-    <h2>my name is manoj</h2>
+    <main>
+        <!-- HERO SECTION -->
+        <section class="banner-area">
+            <div class="banner-wrapper">
+                <h1>Find Your Next Perfect Place</h1>
+                <p>Modern apartments, hassle-free booking.</p>
+
+                <!-- Search Bar -->
+                <div class="search-widget glass-style">
+                    <div class="input-field">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="locationSearchField" placeholder="Search by location (e.g., Mumbai)">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" id="dateSearchField">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-bed"></i>
+                        <select id="bhkSearchField">
+                            <option value="">Any BHK</option>
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4+ BHK</option>
+                        </select>
+                    </div>
+                    <button id="searchActionButton" class="search-action-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTINGS & FILTERS -->
+        <section class="property-showcase">
+            <div class="main-wrapper">
+                <!-- Filters -->
+                <div class="filter-panel">
+                    <h2>Filter Listings</h2>
+                    <div class="filter-category">
+                        <label for="priceRangeSlider">Price Range (per month)</label>
+                        <input type="range" id="priceRangeSlider" min="20000" max="200000" step="5000" value="200000">
+                        <span id="priceDisplayValue">₹200,000</span>
+                    </div>
+                    <div class="filter-category">
+                        <label>BHK</label>
+                        <div class="option-buttons" id="bhkFilterOptions">
+                            <button class="option-btn selected" data-value="">All</button>
+                            <button class="option-btn" data-value="1">1</button>
+                            <button class="option-btn" data-value="2">2</button>
+                            <button class="option-btn" data-value="3">3</button>
+                            <button class="option-btn" data-value="4">4+</button>
+                        </div>
+                    </div>
+                    <div class="filter-category">
+                        <label>Furnishing</label>
+                        <div class="option-buttons" id="furnishingFilterOptions">
+                            <button class="option-btn selected" data-value="">Any</button>
+                            <button class="option-btn" data-value="furnished">Furnished</button>
+                            <button class="option-btn" data-value="semi-furnished">Semi-Furnished</button>
+                        </div>
+                    </div>
+                    <button id="clearAllFilters" class="clear-filters-btn">Reset Filters</button>
+                </div>
+
+                <!-- Apartment Listings -->
+                <div class="property-display-area">
+                    <div class="display-header">
+                        <h2 id="propertyDisplayTitle">Showing All Apartments</h2>
+                        <!-- Theme Toggle -->
+                        <div class="theme-toggle-container">
+                            <label class="mode-switcher" for="darkModeToggle">
+                                <input type="checkbox" id="darkModeToggle">
+                                <div class="toggle-slider round">
+                                    <i class="fa-solid fa-sun light-icon"></i>
+                                    <i class="fa-solid fa-moon dark-icon"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="propertyListingsGrid" class="property-grid">
+                        <!-- Sample apartment cards -->
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Modern 2BHK in Bandra</h3>
+                                <div class="property-cost">₹85,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>2 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>2 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>1200 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Fully furnished apartment with modern amenities in the heart of Bandra.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Luxury 3BHK in Powai</h3>
+                                <div class="property-cost">₹125,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>3 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>3 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>1800 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Premium apartment with lake view and world-class amenities.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Cozy 1BHK in Andheri</h3>
+                                <div class="property-cost">₹45,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>1 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>1 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>650 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Perfect for young professionals, close to metro station.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Spacious 4BHK in Juhu</h3>
+                                <div class="property-cost">₹180,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>4 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>4 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>2500 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Beachside luxury apartment with stunning ocean views.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Modern 2BHK in Worli</h3>
+                                <div class="property-cost">₹95,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>2 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>2 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>1300 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Contemporary design with city skyline views and premium facilities.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Budget 1BHK in Malad</h3>
+                                <div class="property-cost">₹32,000/month</div>
+                                <div class="property-features">
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bed"></i>
+                                        <span>1 BHK</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-bath"></i>
+                                        <span>1 Bath</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="fa-solid fa-maximize"></i>
+                                        <span>550 sqft</span>
+                                    </div>
+                                </div>
+                                <p>Affordable housing option with basic amenities and good connectivity.</p>
+                                <button class="view-details-btn">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS SECTION -->
+        <section class="testimonial-area">
+            <div class="main-wrapper">
+                <h2>What Our Customers Say</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face" alt="Sarah Johnson" class="profile-image">
+                            <div>
+                                <h4>Sarah Johnson</h4>
+                                <div class="rating-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"UrbanBoard made finding my dream apartment so easy! The search filters are intuitive and the property details are accurate. I found my perfect 2BHK in Bandra within a week."</p>
+                    </div>
+
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="Raj Patel" class="profile-image">
+                            <div>
+                                <h4>Raj Patel</h4>
+                                <div class="rating-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"Excellent service and genuine listings. The team was very helpful throughout the entire process. I highly recommend UrbanBoard for anyone looking for quality apartments in Mumbai."</p>
+                    </div>
+
+                    <div class="testimonial-item">
+                        <div class="testimonial-profile">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" alt="Priya Sharma" class="profile-image">
+                            <div>
+                                <h4>Priya Sharma</h4>
+                                <div class="rating-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"The virtual tours and detailed photos helped me shortlist properties before visiting. Saved me so much time! The booking process was smooth and transparent."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOG SECTION -->
+        <section class="blog-area">
+            <div class="main-wrapper">
+                <h2>Latest From Our Blog</h2>
+                <div class="blog-grid">
+                    <article class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=250&fit=crop" alt="Home buying tips" class="blog-thumbnail">
+                        <div class="blog-text">
+                            <h3>10 Essential Tips for First-Time Apartment Hunters</h3>
+                            <p>Moving to a new city or looking for your first apartment? Here are the essential tips that will help you find the perfect place while avoiding common pitfalls.</p>
+                            <a href="#" class="continue-reading">
+                                Read More <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=250&fit=crop" alt="Mumbai real estate" class="blog-thumbnail">
+                        <div class="blog-text">
+                            <h3>Mumbai Real Estate Market Trends 2024</h3>
+                            <p>Discover the latest trends in Mumbai's real estate market, including price movements, emerging localities, and investment opportunities for renters and buyers.</p>
+                            <a href="#" class="continue-reading">
+                                Read More <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="blog-item">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=250&fit=crop" alt="Interior design" class="blog-thumbnail">
+                        <div class="blog-text">
+                            <h3>How to Make a Small Apartment Feel Spacious</h3>
+                            <p>Living in a compact space doesn't mean compromising on style. Learn clever design tricks and space-saving solutions to maximize your small apartment.</p>
+                            <a href="#" class="continue-reading">
+                                Read More <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="main-wrapper">
+            <div class="footer-content-grid">
+                <div class="footer-column">
+                    <h3 class="company-brand">UrbanBoard</h3>
+                    <p>Your trusted partner in finding the perfect apartment. We connect you with quality homes and reliable landlords across major cities in India.</p>
+                    <div class="social-media-links">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Twitter">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Search Apartments</a></li>
+                        <li><a href="#">List Your Property</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Popular Cities</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Mumbai</a></li>
+                        <li><a href="#">Delhi</a></li>
+                        <li><a href="#">Bangalore</a></li>
+                        <li><a href="#">Pune</a></li>
+                        <li><a href="#">Chennai</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-copyright">
+                <p>&copy; 2024 UrbanBoard. All rights reserved. | Designed with ❤️ for apartment seekers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Check for saved theme preference or default to 'light' mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Price Range Slider
+        const priceRangeSlider = document.getElementById('priceRangeSlider');
+        const priceDisplayValue = document.getElementById('priceDisplayValue');
+
+        priceRangeSlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            priceDisplayValue.textContent = `₹${value.toLocaleString('en-IN')}`;
+        });
+
+        // Filter Option Buttons
+        function setupFilterButtons(containerId) {
+            const container = document.getElementById(containerId);
+            const buttons = container.querySelectorAll('.option-btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove selected class from all buttons in this container
+                    buttons.forEach(btn => btn.classList.remove('selected'));
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        // Initialize filter buttons
+        setupFilterButtons('bhkFilterOptions');
+        setupFilterButtons('furnishingFilterOptions');
+
+        // Clear All Filters
+        document.getElementById('clearAllFilters').addEventListener('click', function() {
+            // Reset price slider
+            priceRangeSlider.value = 200000;
+            priceDisplayValue.textContent = '₹200,000';
+
+            // Reset all filter buttons to default (first button selected)
+            ['bhkFilterOptions', 'furnishingFilterOptions'].forEach(containerId => {
+                const container = document.getElementById(containerId);
+                const buttons = container.querySelectorAll('.option-btn');
+                buttons.forEach(btn => btn.classList.remove('selected'));
+                buttons[0].classList.add('selected'); // Select first button
+            });
+
+            // Clear search fields
+            document.getElementById('locationSearchField').value = '';
+            document.getElementById('dateSearchField').value = '';
+            document.getElementById('bhkSearchField').value = '';
+        });
+
+        // Search Functionality
+        document.getElementById('searchActionButton').addEventListener('click', function() {
+            const location = document.getElementById('locationSearchField').value;
+            const date = document.getElementById('dateSearchField').value;
+            const bhk = document.getElementById('bhkSearchField').value;
+
+            // Simple search simulation - in real app, this would filter the listings
+            let searchText = 'Showing All Apartments';
+            if (location || date || bhk) {
+                searchText = 'Search Results';
+                if (location) searchText += ` in ${location}`;
+                if (bhk) searchText += ` - ${bhk} BHK`;
+            }
+
+            document.getElementById('propertyDisplayTitle').textContent = searchText;
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add loading animation to property cards on hover
+        document.querySelectorAll('.property-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Simulate property details button functionality
+        document.querySelectorAll('.view-details-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // In a real application, this would open a detailed view or modal
+                alert('Property details would open here. This is a demo!');
+            });
+        });
+    </script>
 </body>
 </html>
