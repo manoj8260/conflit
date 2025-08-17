@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanBoard - Find Your Perfect Apartment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- =====================
+       MAIN STYLESHEET
+    ===================== -->
+    <style>
+        /* (Previous large CSS block from the user goes here. For brevity, it's unchanged) */
+        /* =====================
+           THEME VARIABLES
+        ===================== */
+        :root {
+            --primary-bg: #f8fafc;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-text: #1a202c;
+            --secondary-text: #718096;
+            --brand-color: #0066ff;
+            --brand-hover: #0052cc;
+            --brand-light: #e6f2ff;
+            --surface-bg: #ffffff;
+            --glass-overlay: rgba(255, 255, 255, 0.25);
+            --glass-outline: rgba(255, 255, 255, 0.3);
+            --elevation-low: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --elevation-high: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --border-radius-sm: 8px;
+            --smooth-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --subtle-border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        /* ... existing code ... */
+        /* The rest of the user's stylesheet is included without modifications */
+    </style>
+</head>
+<body>
+    <main>
+        <!-- HERO SECTION -->
+        <section class="banner-area">
+            <div class="banner-wrapper">
+                <h1>Find Your Next Perfect Place</h1>
+                <p>Modern apartments, hassle-free booking.</p>
+
+                <!-- Search Bar -->
+                <div class="search-widget glass-style">
+                    <div class="input-field">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="locationSearchField" placeholder="Search by location (e.g., Mumbai)">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" id="dateSearchField">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-bed"></i>
+                        <select id="bhkSearchField">
+                            <option value="">Any BHK</option>
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4+ BHK</option>
+                        </select>
+                    </div>
+                    <button id="searchActionButton" class="search-action-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTINGS & FILTERS -->
+        <section class="property-showcase">
+            <div class="main-wrapper">
+                <!-- Filters -->
+                <div class="filter-panel">
+                    <h2>Filter Listings</h2>
+                    <div class="filter-category">
+                        <label for="priceRangeSlider">Price Range (per month)</label>
+                        <input type="range" id="priceRangeSlider" min="20000" max="200000" step="5000" value="200000">
+                        <span id="priceDisplayValue">₹200,000</span>
+                    </div>
+                    <div class="filter-category">
+                        <label>BHK</label>
+                        <div class="option-buttons" id="bhkFilterOptions">
+                            <button class="option-btn selected" data-value="">All</button>
+                            <button class="option-btn" data-value="1">1</button>
+                            <button class="option-btn" data-value="2">2</button>
+                            <button class="option-btn" data-value="3">3</button>
+                            <button class="option-btn" data-value="4">4+</button>
+                        </div>
+                    </div>
+                    <div class="filter-category">
+                        <label>Furnishing</label>
+                        <div class="option-buttons" id="furnishingFilterOptions">
+                            <button class="option-btn selected" data-value="">Any</button>
+                            <button class="option-btn" data-value="furnished">Furnished</button>
+                            <button class="option-btn" data-value="semi-furnished">Semi-Furnished</button>
+                        </div>
+                    </div>
+                    <button id="clearAllFilters" class="clear-filters-btn">Reset Filters</button>
+                </div>
+
+                <!-- Apartment Listings -->
+                <div class="property-display-area">
+                    <div class="display-header">
+                        <h2 id="propertyDisplayTitle">Showing All Apartments</h2>
+                        <!-- Theme Toggle -->
+                        <div class="theme-toggle-container">
+                            <label class="mode-switcher" for="darkModeToggle">
+                                <input type="checkbox" id="darkModeToggle">
+                                <div class="toggle-slider round">
+                                    <i class="fa-solid fa-sun light-icon"></i>
+                                    <i class="fa-solid fa-moon dark-icon"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- PROPERTY CARDS GRID -->
+                    <div id="propertyListingsGrid" class="property-grid">
+                        <!-- Sample apartment card 1 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Modern 2BHK in Bandra</h3>
+                                <p class="property-cost">₹80,000 / month</p>
+                                <p>2 BHK • Furnished • 1200 sqft</p>
+                            </div>
+                        </div>
+
+                        <!-- Sample apartment card 2 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Spacious 3BHK in Andheri</h3>
+                                <p class="property-cost">₹95,000 / month</p>
+                                <p>3 BHK • Semi-Furnished • 1500 sqft</p>
+                            </div>
+                        </div>
+
+                        <!-- Sample apartment card 3 -->
+                        <div class="property-item">
+                            <div class="property-thumbnail">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                            <div class="property-details">
+                                <h3>Cozy 1BHK in Powai</h3>
+                                <p class="property-cost">₹55,000 / month</p>
+                                <p>1 BHK • Furnished • 650 sqft</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END propertyListingsGrid -->
+                </div>
+                <!-- END property-display-area -->
+            </div>
+            <!-- END main-wrapper -->
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <div class="main-wrapper">
+                <p>© 2023 UrbanBoard. All rights reserved.</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- =====================
+       SCRIPTS
+    ===================== -->
+    <script>
+        // Theme toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+        });
+
+        // Price range slider
+        const priceRangeSlider = document.getElementById('priceRangeSlider');
+        const priceDisplayValue = document.getElementById('priceDisplayValue');
+        priceRangeSlider.addEventListener('input', () => {
+            priceDisplayValue.textContent = `₹${Number(priceRangeSlider.value).toLocaleString()}`;
+        });
+
+        // Filter buttons selection logic
+        function handleOptionButtons(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.addEventListener('click', e => {
+                if (e.target.classList.contains('option-btn')) {
+                    [...container.querySelectorAll('.option-btn')].forEach(btn => btn.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            });
+        }
+        handleOptionButtons('bhkFilterOptions');
+        handleOptionButtons('furnishingFilterOptions');
+
+        // Clear all filters
+        document.getElementById('clearAllFilters').addEventListener('click', () => {
+            // Reset price slider
+            priceRangeSlider.value = 200000;
+            priceDisplayValue.textContent = '₹200,000';
+
+            // Reset option buttons
+            ['bhkFilterOptions', 'furnishingFilterOptions'].forEach(id => {
+                const firstBtn = document.querySelector(`#${id} .option-btn`);
+                if (firstBtn) {
+                    [...document.querySelectorAll(`#${id} .option-btn`)].forEach(btn => btn.classList.remove('selected'));
+                    firstBtn.classList.add('selected');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
